@@ -11,7 +11,6 @@ Student Number: 300114467
 ### Professor and Teaching Assistants
 
 Professeur: Mohamed Ali Ibrahim, mibrahi3@uottawa.ca<br>
-TA: 
 
 Cours: CEG 3585<br>
 Date: Hiver 2023
