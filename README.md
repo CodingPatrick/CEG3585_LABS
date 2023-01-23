@@ -1,2 +1,19 @@
-# CEG3585_LAB1
-lab 1 pour CEG3585: Introduction à la communication de données et réseautage 
+# LAB 1
+
+### Équipe
+
+Name: Patrick Loranger, plora079@uottawa.ca<br>
+Student Number: 300112374<br>
+
+Name: Pierre Akladios, pakla072@uottawa.ca<br>
+Student Number: 300114467
+
+### Professor and Teaching Assistants
+
+
+Course: CEG 3585<br>
+Date: Hiver 2023
+
+### Lien
+
+* [https://github.com/CodingPatrick/CEG3585_LAB1](https://github.com/CodingPatrick/CEG3585_LAB1)
