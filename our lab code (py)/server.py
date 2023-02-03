@@ -42,7 +42,7 @@ while True:
     conn, address = server.accept()
     clients.append(conn)
     ids[conn] = address
-    print(f'{address} is now connected.')
+    print(f'{address} connected.')
     conn.sendall(f'\nWelcome {address}!'.encode())
     thread = threading.Thread(target=add, args=(conn,))
     thread.start()
