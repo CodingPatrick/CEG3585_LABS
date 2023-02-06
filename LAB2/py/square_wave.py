@@ -8,13 +8,14 @@ STARTI=-10
 ENDI=10
 DT=0.01
 H=100
+T = 2
 
 coefprint=True
 
-def f(t, h=H):
+def f(t=T, h=H):
     a0=0
     somme = a0
-    global ceofprint
+    global coefprint
     for n in range(1,h+1):
         an=0
         bn=(20/(n*PI))*(1-math.pow(-1,n))
