@@ -1,4 +1,4 @@
-# LAB 1
+# LABS
 
 ### Équipe
 
