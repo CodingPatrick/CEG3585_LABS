@@ -17,4 +17,4 @@ Date: Hiver 2023
 
 ### Lien
 
-* [https://github.com/CodingPatrick/CEG3585_LAB1](https://github.com/CodingPatrick/CEG3585_LAB1)
+* [https://github.com/CodingPatrick/CEG3585_LAB1](https://github.com/CodingPatrick/CEG3585_LABS)
