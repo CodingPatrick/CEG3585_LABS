@@ -10,14 +10,25 @@ ENDI=10
 DT=0.01
 H=100
 T=2
+A=10
 
 coefprint=True
 
 def f(t=T, h=H):
-    a0=0
+    a0=A
     somme = a0
     global coefprint
-    #to be implemented
+    for n in range(1,h+1):
+        an=0
+        bn=(-A/(n*PI))
+
+        if coefprint:
+            print(f"> a0: {a0}    --    a{n} : {round(an,3)}    --    b{n} : {round(bn,3)}")
+        somme = somme + bn*math.sin(n*PI*t)
+
+    if coefprint:
+        coefprint = False
+    return somme
 
 print('> == SawtoothWave == ')
 print(f'> a0        --        an        --        bn')

@@ -17,7 +17,17 @@ def f(t=T, h=H):
     a0=0
     somme = a0
     global coefprint
-    #to be implemented
+    for n in range(1,h+1):
+        an=0 # to be implemented
+        bn=0 #to be implemented
+
+        if coefprint:
+            print(f"> a0: {a0}    --    a{n} : {round(an,3)}    --    b{n} : {round(bn,3)}")
+        somme = somme #to be implemented
+
+    if coefprint:
+        coefprint = False
+    return somme
 
 print('> == TriangularWave == ')
 print(f'> a0        --        an        --        bn')

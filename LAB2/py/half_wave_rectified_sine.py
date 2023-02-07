@@ -10,14 +10,25 @@ ENDI=10
 DT=0.01
 H=100
 T=2
+A = 10
 
 coefprint=True
 
 def f(t=T, h=H):
-    a0=0
+    a0=(2*A)/PI
     somme = a0
     global coefprint
-    #to be implemented
+    for n in range(1,h+1):
+        an=0 # to be implemented
+        bn=0 #to be implemented
+
+        if coefprint:
+            print(f"> a0: {a0}    --    a{n} : {round(an,3)}    --    b{n} : {round(bn,3)}")
+        somme = somme #to be implemented
+
+    if coefprint:
+        coefprint = False
+    return somme
 
 print('> == HalfWaveRectifiedSine == ')
 print(f'> a0        --        an        --        bn')
