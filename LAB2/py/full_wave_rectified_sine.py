@@ -14,13 +14,13 @@ A = 10
 
 coefprint=True
 
-def f(t=T, h=H):
+def f(t, h=H):
     a0= (4*A)/PI
     somme = a0
     global coefprint
     for n in range(1,h+1):
         if (n % 2) == 0:
-            an= ((-4*A)/PI)(1/((n**2)-1))
+            an= ((-40)/PI)*(1/((n**2)-1))
         else: 
             an = 0
         bn=0

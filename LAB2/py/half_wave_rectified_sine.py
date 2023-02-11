@@ -20,7 +20,7 @@ def f(t=T, h=H):
     global coefprint
     for n in range(1,h+1):
         if (n % 2) == 0:
-            an= ((-2*A)/PI)(1/((n**2)-1))
+            an= ((-20)/PI)*(1/((n**2)-1))
         else: 
             an = 0
         if n == 1:
@@ -30,7 +30,7 @@ def f(t=T, h=H):
 
         if coefprint:
             print(f"> a0: {round(a0,3)}    --    a{n} : {round(an,3)}    --    b{n} : {round(bn,3)}")
-        somme = somme + an*math.sin(n*PI*t) + bn*math.sin(n*PI*t)
+        somme = somme + an + bn*math.sin(n*PI*t)
 
 
     if coefprint:
