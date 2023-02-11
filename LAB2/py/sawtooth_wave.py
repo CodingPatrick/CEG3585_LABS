@@ -23,7 +23,7 @@ def f(t=T, h=H):
         bn=(-A/(n*PI))
 
         if coefprint:
-            print(f"> a0: {a0}    --    a{n} : {round(an,3)}    --    b{n} : {round(bn,3)}")
+            print(f"> a0: {round(a0,3)}    --    a{n} : {round(an,3)}    --    b{n} : {round(bn,3)}")
         somme = somme + bn*math.sin(n*PI*t)
 
     if coefprint:
