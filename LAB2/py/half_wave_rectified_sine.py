@@ -15,7 +15,7 @@ A = 10
 coefprint=True
 
 def f(t=T, h=H):
-    a0=(2*A)/PI
+    a0=PI
     somme = a0
     global coefprint
     for n in range(1,h+1):
@@ -30,7 +30,7 @@ def f(t=T, h=H):
 
         if coefprint:
             print(f"> a0: {round(a0,3)}    --    a{n} : {round(an,3)}    --    b{n} : {round(bn,3)}")
-        somme = somme + an + bn*math.sin(n*PI*t)
+        somme = somme + an*math.cos(n*PI*t) + bn*math.sin(n*PI*t)
 
 
     if coefprint:

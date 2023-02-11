@@ -15,7 +15,7 @@ A=10
 coefprint=True
 
 def f(t=T, h=H):
-    a0=A
+    a0=1.5*PI
     somme = a0
     global coefprint
     for n in range(1,h+1):
