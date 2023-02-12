@@ -14,16 +14,16 @@ T=2
 coefprint=True
 
 def f(t=T, h=H):
-    a0=0
+    a0= 2 - (8/math.pow(PI,2))
     somme = a0
     global coefprint
     for n in range(1,h+1):
-        an=0 # to be implemented
-        bn=0 #to be implemented
+        an= 1/(math.pow(2*n -1,2))
+        bn=0 
 
         if coefprint:
             print(f"> a0: {a0}    --    a{n} : {round(an,3)}    --    b{n} : {round(bn,3)}")
-        somme = somme #to be implemented
+        somme = somme + an*math.cos(((2*n-1)*PI*t)/2)
 
     if coefprint:
         coefprint = False
