@@ -18,12 +18,12 @@ def f(t=T, h=H):
     somme = a0
     global coefprint
     for n in range(1,h+1):
-        an=0
-        bn=(20/(n*PI))*(1-math.pow(-1,n))/2
+        an=(20/(n*PI))*(np.sin(n*PI/2))
+        bn=0
 
         if coefprint:
             print(f"> a0: {a0}    --    a{n} : {round(an,3)}    --    b{n} : {round(bn,3)}")
-        somme = somme + bn*math.sin(n*PI*t)
+        somme = somme + an*math.cos(n*PI*t)
 
     if coefprint:
         coefprint = False
