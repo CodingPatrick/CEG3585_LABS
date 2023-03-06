@@ -59,7 +59,10 @@ def encoding(message):
             output.append(0)
             i+=1
         else:
-            output.append(change)
+            if change ==-1:
+                output.append('-')
+            elif change == 1:
+                output.append('+')
             i+=1
             if(change == 1):
                 change = -1
