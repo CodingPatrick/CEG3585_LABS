@@ -18,7 +18,8 @@ print('###########################################')
 def send():
     while True:
         message = input()
-        client.sendall(message.encode())
+        encoded = encoding(message)
+        client.sendall(encoded.encode())
 
 def get():
     while True:

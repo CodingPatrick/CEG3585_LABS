@@ -51,8 +51,6 @@ def decoding(message):
     outString = ''.join(str(e) for e in output)
     return outString
 
-
-
 while True:
     conn, address = server.accept()
     clients.append(conn)
