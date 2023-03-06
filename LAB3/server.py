@@ -38,8 +38,8 @@ def broadcast(data, conn):
         if i != conn:
             i.sendall(f'Message from {ids[conn]}: {data.decode()}'.encode())
 
-def decoding():
-    pass
+def decoding(message):
+    output = []
 
 while True:
     conn, address = server.accept()
