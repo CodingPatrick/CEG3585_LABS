@@ -28,6 +28,7 @@ def get():
 
 def encoding(message):
     output = []
+    outString = ''
     b = message
     change = 1
     i=0
@@ -63,7 +64,8 @@ def encoding(message):
                 change = -1
             else:
                 change = 1
-    return output
+    outString = ''.join(str(e) for e in output)
+    return outString
 
 sending = threading.Thread(target=send)
 sending.start()

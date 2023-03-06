@@ -40,6 +40,18 @@ def broadcast(data, conn):
 
 def decoding(message):
     output = []
+    outstring = ''
+    for x in message:
+        if x == "0":
+            output.append(0)
+        elif x == "1":
+            output.append(1)
+        elif x == "+" or x == "-":
+            output.append(0)
+    outString = ''.join(str(e) for e in output)
+    return outString
+
+
 
 while True:
     conn, address = server.accept()
