@@ -65,7 +65,10 @@ def decoding(message):
             output.append(0)
             i+=8
         elif(b[i]=='+' or b[i]=='-'):
+            i+=8
+        elif(b[i]=='+' or b[i]=='-'):
             output.append(1)
+            i+=1
             i+=1
     outString = ''.join(str(e) for e in output)
     return outString
