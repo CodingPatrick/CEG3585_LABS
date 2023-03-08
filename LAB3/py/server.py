@@ -41,8 +41,8 @@ def decoding(message):
     while(i<len(b)):
         if(i == 0):
             if(b[i] == '+' or b[i] == '-'):
-                 output.append(1)
-                 i+=1
+                output.append(1)
+                i+=1
 
         if(i<=(len(b)-8) and b[i]=='0' and b[i+1]=='0' and b[i+2]=='0' and b[i+3]=='+' and b[i+4]=='-' and b[i+5]=='0' and b[i+6]=='-' and b[i+7]=='+' and i!=0  ):
             output.append(0)
@@ -65,6 +65,8 @@ def decoding(message):
             output.append(0)
             i+=8
         elif(b[i]=='+' or b[i]=='-'):
+            i+=8
+        elif(b[i]=='+' or b[i]=='-'):
             output.append(1)
             i+=1
         elif (b[i] == '0'):
@@ -78,3 +80,4 @@ while True:
     clients.append(conn)
     thread = threading.Thread(target=handle, args=(conn,))
     thread.start()
+    print(decoding('1100000000110000010'))
