@@ -35,13 +35,38 @@ def handle(conn):
 def decoding(message):
     output = []
     outString = ''
-    for x in message:
-        if x == "0":
+    b = message
+    change = 1
+    i=0
+    while(i<len(b)):
+        if(i == 0):
+            if(b[i] == '+' or b[i] == '-'):
+                output.append(1)
+                i+=1
+
+        if(i<=(len(b)-8) and b[i]=='0' and b[i+1]=='0' and b[i+2]=='0' and b[i+3]=='+' and b[i+4]=='-' and b[i+5]=='0' and b[i+6]=='-' and b[i+7]=='+' and i!=0  ):
             output.append(0)
-        elif x == "1":
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            i+=8
+        elif(i<=(len(b)-8) and b[i]=='0' and b[i+1]=='0' and b[i+2]=='0' and b[i+3]=='-' and b[i+4]=='+' and b[i+5]=='0' and b[i+6]=='+' and b[i+7]=='-' and i!=0  ):
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            i+=8
+        elif(b[i]=='+' or b[i]=='-'):
             output.append(1)
-        elif x == "+" or x == "-":
-            output.append(0)
+            i+=1
     outString = ''.join(str(e) for e in output)
     return outString
 
@@ -50,3 +75,4 @@ while True:
     clients.append(conn)
     thread = threading.Thread(target=handle, args=(conn,))
     thread.start()
+    print(decoding('1100000000110000010'))
