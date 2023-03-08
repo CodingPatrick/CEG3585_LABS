@@ -1,46 +1,40 @@
 import socket
 import threading
+import time
 
 host, port = ("127.0.0.1", 4444)
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((host, port))
 server.listen(5)
-print(f"\nServer is running on host: {host}, on port: {port}")
+print(f"\nB8ZS SERVER using Address: {host}:{port}\n")
 clients = []
 ids = {}
 
-def send(conn):
+def handle(conn):
     while True:
         data = conn.recv(1024)
-        if data.decode().startswith('pm'):
-            receiver, message = data.decode().split(' ', 2)[1:]
-            pm(receiver, message, conn)
-        elif data.decode().startswith('conn'):
-            client(conn)
-        else:
-            broadcast(data, conn)
-
-def client(conn):
-    connections = ''
-    for i in clients:
-        connections = connections + str(ids[i])
-    conn.sendall(f'Active clients: {connections}'.encode())
-
-def pm(receiver, message, conn):
-    for i in ids.keys():
-        if ids[i][1] == int(receiver):
-            i.sendall(f'Message from {ids[conn]}: {message}'.encode())
-            return
-
-def broadcast(data, conn):
-    for i in clients:
-        if i != conn:
-            i.sendall(f'Message from {ids[conn]}: {data.decode()}'.encode())
+        message = data.decode()
+        decoded = decoding(message)
+        if data.decode().startswith('+') or data.decode().startswith('-'):
+            
+            print('Sending request from client received')
+            print('Sending message acception...')
+            time.sleep(0.5)
+            conn.sendall(f'OK'.encode())
+            time.sleep(0.5)
+            conn.sendall(f'RECEIVED'.encode())
+            
+            print(f'New message from Client : {message}')
+            print(f'Encoded Message : {message}')
+            print(f'Decoded Message : {decoded}')
+            print('Sending confirmation of reception to the client.\n')
+            time.sleep(0.5)
+            conn.sendall(f'Message received!\n'.encode())
 
 def decoding(message):
     output = []
-    outstring = ''
+    outString = ''
     for x in message:
         if x == "0":
             output.append(0)
@@ -54,8 +48,5 @@ def decoding(message):
 while True:
     conn, address = server.accept()
     clients.append(conn)
-    ids[conn] = address
-    print(f'{address} connected.')
-    conn.sendall(f'\nWelcome {address}!'.encode())
-    thread = threading.Thread(target=send, args=(conn,))
+    thread = threading.Thread(target=handle, args=(conn,))
     thread.start()
