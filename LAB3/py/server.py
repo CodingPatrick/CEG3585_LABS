@@ -31,20 +31,45 @@ def handle(conn):
             time.sleep(0.5)
             conn.sendall(f'Message received!\n'.encode())
 
-pattern = "00000000"
-encodingPatterns = ["000-+0+-", "000+-0-+"]
-
-def decoding(val):
-    value = val
-    # Replace any encoding pattern found in the string by "00000000"
-    value = value.replace(encodingPatterns[0], pattern,
-                          value.count(encodingPatterns[0]))
-    value = value.replace(encodingPatterns[1], pattern,
-                          value.count(encodingPatterns[1]))
-    # Replace + and - by 1
-    value = value.replace("+", "1", value.count("+"))
-    value = value.replace("-", "1", value.count("-"))
-    return value
+def decoding(message):
+    output = []
+    outString = ''
+    b = message
+    change = 1
+    i=0
+    while(i<len(b)):
+        if(i == 0):
+            if(b[i] == '+' or b[i] == '-'):
+                output.append(1)
+                i+=1
+        if(i<=(len(b)-8) and b[i]=='0' and b[i+1]=='0' and b[i+2]=='0' and b[i+3]=='+' and b[i+4]=='-' and b[i+5]=='0' and b[i+6]=='-' and b[i+7]=='+' and i!=0  ):
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            i+=8
+        elif(i<=(len(b)-8) and b[i]=='0' and b[i+1]=='0' and b[i+2]=='0' and b[i+3]=='-' and b[i+4]=='+' and b[i+5]=='0' and b[i+6]=='+' and b[i+7]=='-' and i!=0  ):
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            output.append(0)
+            i+=8
+        elif(b[i]=='+' or b[i]=='-'):
+            output.append(1)
+            i+=1
+        elif (b[i] == '0'):
+            output.append(0)
+            i+=1
+    outString = ''.join(str(e) for e in output)
+    return outString
 
 while True:
     conn, address = server.accept()
