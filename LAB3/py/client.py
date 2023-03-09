@@ -19,7 +19,7 @@ def get():
     while True:
         data = client.recv(1024).decode()
         if not data: break
-        if data.startswith('OK'):
+        elif data.startswith('OK'):
             print('OK')
             print('Request accepted sending message...')
             time.sleep(0.5)
