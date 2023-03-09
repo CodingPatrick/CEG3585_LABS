@@ -22,8 +22,6 @@ def get():
         elif data.startswith('OK'):
             print('OK')
             print('Request accepted sending message...')
-            time.sleep(0.5)
-            client.sendall('Request accepted sending message...'.encode())
         elif data.startswith('RECEIVED'):
             print('RECEIVED')
         else: 
