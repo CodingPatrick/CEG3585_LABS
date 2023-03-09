@@ -16,8 +16,7 @@ def handle(conn):
         data = conn.recv(1024)
         message = data.decode()
         decoded = decoding(message)
-        if data.decode().startswith('+') or data.decode().startswith('-'):
-            
+        if data.decode().startswith('+') or data.decode().startswith('-'):       
             print('Sending request from client received')
             print('Sending message acception...')
             time.sleep(0.5)
@@ -69,4 +68,3 @@ while True:
     clients.append(conn)
     thread = threading.Thread(target=handle, args=(conn,))
     thread.start()
-    print(decoding('1100000000110000010'))
