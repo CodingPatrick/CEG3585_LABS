@@ -143,6 +143,10 @@ public class SecondaryHDLCDataLink
 		// Wait for poll - need an RR with P bit - 1
 		
 		/*Completer cette partie*/
+		frame = getRRFrame(true);
+		if (frame.charAt(HdlcDefs.PF_IX) == '0') {
+			return null;
+		}
 				
 		// Send the SDU
 		// After each transmission, check for an ACK (RR)
