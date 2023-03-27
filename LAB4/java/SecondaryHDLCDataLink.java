@@ -1,23 +1,25 @@
 import java.io.IOException;
 import java.util.ArrayList;
 
-// Data Link Layer Entity for Secondary Station
-// Uses the HDLC protocol for communication over a multipoint link
-// Assumptions
-//    Normal Response Mode operation over multi-point link (simulated using PhysicalLayer class over Sockets)
-//    Use 3-bit sequence numbers
-// Not Supported:
-//    FSC checking
-//    Bit stuffing (frames are transmitted as strings)
-//  Frames implemented:
-//     Command Frames:
-//        NRM: 
-//        DISC: 
-//     Response Frames:
-//        UA: 
-//     Command/Response Frames:
-//        I: maximum length of data field is 64 bytes.
-//        RR: 
+/*
+	// Data Link Layer Entity for Secondary Station
+	// Uses the HDLC protocol for communication over a multipoint link
+	// Assumptions
+	//    Normal Response Mode operation over multi-point link (simulated using PhysicalLayer class over Sockets)
+	//    Use 3-bit sequence numbers
+	// Not Supported:
+	//    FSC checking
+	//    Bit stuffing (frames are transmitted as strings)
+	//  Frames implemented:
+	//     Command Frames:
+	//        NRM: 
+	//        DISC: 
+	//     Response Frames:
+	//        UA: 
+	//     Command/Response Frames:
+	//        I: maximum length of data field is 64 bytes.
+	//        RR: 
+*/
 
 public class SecondaryHDLCDataLink 
 {
