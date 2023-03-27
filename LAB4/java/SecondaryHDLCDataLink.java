@@ -200,6 +200,7 @@ public class SecondaryHDLCDataLink
 	 * Helper Methods
 	 *------------------------------------------------------------------------*/
 
+	/*
 	// Determines the number of frames acknowledged from the
 	// acknowledge number nr.
 	// Parameters
@@ -208,6 +209,8 @@ public class SecondaryHDLCDataLink
 	// rhs - right hand side of window - seq number to the
 	//       right of the last valid number that can be used
 	// sz - size of the window
+*/
+
 	private int checkNr(int nr, int rhs, int sz) {
 		// CHANGE ################################################################
 
@@ -243,12 +246,14 @@ public class SecondaryHDLCDataLink
 		}
 	}
 	
+	/*
 	// Helper method to get an RR-frame
 	// If wait is true then wait until a frame
 	// arrives (call getframe(true).
 	// If false, return null if no frame
 	// is available from the physical layer (call getframe(false)
 	// or frame received is not an RR frame.
+*/
 	private String getRRFrame(boolean wait) {
 
 		// CHANGE ################################################################
@@ -271,8 +276,10 @@ public class SecondaryHDLCDataLink
 		return(frame);
 	}
 
+	/*
 	// For displaying the status of variables used
 	// in exchanging data between stations.
+*/
 	private void displayDataXchngState(String msg) {
 		int lhs; // left hand side of the window
 		//compute lhs
@@ -285,10 +292,12 @@ public class SecondaryHDLCDataLink
 				           ", Number frames buffered = "+frameBuffer.size());
 	}
 
+	/*
 	// Waits for reception of frame
 	// If wait is true, then wait for a frame to arrive,
 	// otherwise just poll physical layer for a frame.
 	// Returns null if no frame is received.
+	*/
 	private String getFrame(boolean wait) {
 		// Only frames with this stations address is processed - others are ignored
 		String frame = null;
