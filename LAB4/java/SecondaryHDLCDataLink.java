@@ -135,70 +135,65 @@ public class SecondaryHDLCDataLink
 	 *  Data service - non-confirmed service
 	 *-----------------------------------------------------------*/
 
-	public Result dlDataRequest(String sdu) {
-		String frame;
+	public Result dlDataRequest(String sdu)
+	{
+		String frame; // For building frames
 		Result.ResultCode cd = Result.ResultCode.SrvSucessful;
+ 
+		// Wait for poll - need an RR with P bit - 1
+		 
+		/*Completer cette partie*/
 
-		/* Completer cette partie */
 		frame = getRRFrame(true);
-		if (frame.charAt(HdlcDefs.PF_IX) == '0')
+		boolean condition = frame.charAt(HdlcDefs.PF_IX) == '0';
+		if(condition) {
 			return null;
+		}
 
-		String[] dataArr = BitString.splitString(sdu, HdlcDefs.MAX_DATA_SIZE_BYTES);
-
-		for (int ix = 0; ix < dataArr.length; ix++)
+		// Send the SDU
+		// After each transmission, check for an ACK (RR)
+		// Use a sliding window
+		// Reception will be go back-N
+		String [] dataArr = BitString.splitString(sdu, HdlcDefs.MAX_DATA_SIZE_BYTES);
+		// Convert the strings into bitstrings
+		for(int ix=0 ; ix < dataArr.length; ix++)
 			dataArr[ix] = BitString.stringToBitString(dataArr[ix]);
+		// Loop to transmit frames
+		/*Completer la boucle*/
 
 		int i = 0;
+		String bString;
 		int nr;
-		String bitFrame;
-		int ackFrames;
+		int ack;
 
-		/* Completer la boucle */
-		while (frameBuffer.size() > 0 || i < dataArr.length) {
-
-			if (i < dataArr.length && vs != rhsWindow) {
-				frameBuffer.add(bitFrame = dataArr[i]);
-				vs = ++vs % HdlcDefs.SNUM_SIZE_COUNT;
-				// Envoyer le frame
-				sendIFrame(bitFrame, i % HdlcDefs.SNUM_SIZE_COUNT, i == dataArr.length - 1);
-				displayDataXchngState(
-						"Data Link Layer: prepared and buffered I frame >" + BitString.displayFrame(bitFrame) + "<");
-				i++;
-			}
-			// Vérifier RR
-			frame = getRRFrame(false); // just poll
-			if (((frame.charAt(HdlcDefs.PF_IX) == '0' && frame != null))) // avoir le ACK frame
+		while(frameBuffer.size()>0 || i<dataArr.length)
+		{
+			// Send frame if window not closed and data not all transmitted
+			if(i<dataArr.length && vs!=rhsWindow)
 			{
-				// Sortir le numero de acknowledgement
-				nr = BitString.bitStringToInt(frame.substring(HdlcDefs.NR_START, HdlcDefs.NR_END));
-				// Calculer le nombre des frames
-				ackFrames = checkNr(nr, rhsWindow, windowSize);
-				// mettre à jour le nombre de frame recu
-				rhsWindow = (rhsWindow + ackFrames) % HdlcDefs.SNUM_SIZE_COUNT;
-				// Enlever les frames transmis
-				for (int j = 0; j < ackFrames; j++)
-					frameBuffer.remove(0);
-
-				displayDataXchngState("received an RR frame (ack) >" + BitString.displayFrame(frame) + "<");
+				frameBuffer.add(bString = dataArr[i]);
+				vs = ++vs % HdlcDefs.SNUM_SIZE_COUNT;
+				int fnum = (i % HdlcDefs.SNUM_SIZE_COUNT);
+				boolean flast = (i == dataArr.length - 1);
+				String fLast = flast ? "1" : "0";
+				String add = BitString.intToBitString(stationAdr, HdlcDefs.ADR_SIZE_BITS);
+				String con = HdlcDefs.I_FRAME+BitString.intToBitString(fnum, 3)+fLast+BitString.intToBitString(vr, 3);
+				String send = HdlcDefs.FLAG+add+con+bString+HdlcDefs.FLAG;
+				physicalLayer.transmit(send);
+				displayDataXchngState("Data Link Layer: prepared and buffered I frame >"+BitString.displayFrame(frame)+"<");
 			}
+			// Check for RR
+			frame = getRRFrame(false); // just poll
+			if((frame != null) && condition) // have a frame
+			{
+				nr = BitString.bitStringToInt(frame.substring(HdlcDefs.NR_START, HdlcDefs.NR_END));
+				ack = checkNr(nr, rhsWindow, windowSize);
+				rhsWindow = (rhsWindow+ack) % HdlcDefs.SNUM_SIZE_COUNT;
+				for (int j = 0; j < ack; j++) frameBuffer.remove(0);
+				displayDataXchngState("received an RR frame (ack) >"+BitString.displayFrame(frame)+"<");
+			}	
 		}
-		return (new Result(cd, 0, null));
-	}
-
-	private void sendIFrame(String info, int frameNumber, boolean isFinal) {
-		String finalBit = isFinal ? "1" : "0";
-
-		// Construire les champs d'adresse et de contrôle
-		String address = BitString.intToBitString(stationAdr, HdlcDefs.ADR_SIZE_BITS);
-		String control = HdlcDefs.I_FRAME + BitString.intToBitString(frameNumber, 3) + finalBit
-				+ BitString.intToBitString(vr, 3);
-
-		// Construit le frame
-		String frame = HdlcDefs.FLAG + address + control + info + HdlcDefs.FLAG;
-
-		// Envoy le frame
-		physicalLayer.transmit(frame);
+		return(new Result(cd, 0, null));		
 	}
 
 	/*------------------------------------------------------------------------
