@@ -125,52 +125,45 @@ public class SecondaryHDLCDataLink {
 	 *-----------------------------------------------------------*/
 
 	public Result dlDataRequest(String sdu) {
-		String frame; // For building frames
+		String frame;
 		Result.ResultCode cd = Result.ResultCode.SrvSucessful;
-
-		// Wait for poll - need an RR with P bit - 1
 
 		/* Completer cette partie */
 		frame = getRRFrame(true);
 		if (frame.charAt(HdlcDefs.PF_IX) == '0')
 			return null;
-		// si ce n'est pas un sondage
 
-		// Send the SDU
-		// After each transmission, check for an ACK (RR)
-		// Use a sliding window
-		// Reception will be go back-N
 		String[] dataArr = BitString.splitString(sdu, HdlcDefs.MAX_DATA_SIZE_BYTES);
-		// Convert the strings into bitstrings
+
 		for (int ix = 0; ix < dataArr.length; ix++)
 			dataArr[ix] = BitString.stringToBitString(dataArr[ix]);
 
-		int ackFrames;
+		int i = 0;
 		int nr;
 		String bitFrame;
-		int i = 0;
-		// Loop to transmit frames
+		int ackFrames;
+
 		/* Completer la boucle */
-		while (i < dataArr.length || frameBuffer.size() > 0) {
-			// Send frame if window not closed and data not all transmitted
-			if (vs != rhsWindow && i < dataArr.length) {
+		while (frameBuffer.size() > 0 || i < dataArr.length) {
+
+			if (i < dataArr.length && vs != rhsWindow) {
 				frameBuffer.add(bitFrame = dataArr[i]);
 				vs = ++vs % HdlcDefs.SNUM_SIZE_COUNT;
-				// Envoy le frame
+				// Envoyer le frame
 				sendIFrame(bitFrame, i % HdlcDefs.SNUM_SIZE_COUNT, i == dataArr.length - 1);
-				i++;
 				displayDataXchngState(
 						"Data Link Layer: prepared and buffered I frame >" + BitString.displayFrame(bitFrame) + "<");
+				i++;
 			}
-			// Check for RR
+			// Vérifier RR
 			frame = getRRFrame(false); // just poll
-			if ((frame != null) && (frame.charAt(HdlcDefs.PF_IX) == '0')) // avoir le ACK frame
+			if (((frame.charAt(HdlcDefs.PF_IX) == '0' && frame != null))) // avoir le ACK frame
 			{
 				// Sortir le numero de acknowledgement
 				nr = BitString.bitStringToInt(frame.substring(HdlcDefs.NR_START, HdlcDefs.NR_END));
-				// Calculer le numero des frames
+				// Calculer le nombre des frames
 				ackFrames = checkNr(nr, rhsWindow, windowSize);
-				// Update sur le nombre de frame acknowledged
+				// mettre à jour le nombre de frame recu
 				rhsWindow = (rhsWindow + ackFrames) % HdlcDefs.SNUM_SIZE_COUNT;
 				// Enlever les frames transmis
 				for (int j = 0; j < ackFrames; j++)
@@ -200,30 +193,13 @@ public class SecondaryHDLCDataLink {
 	private int checkNr(int nr, int rhs, int sz) {
 		/* Completer cette methode */
 		int lhs;
-		/*
-		 * Cas 1:
-		 * Le côté droit est plus petit que la taille de la fenêtre
-		 */
-		if ((rhs - sz) < 0) {
-			lhs = rhs + sz;
-			if ((nr <= rhs) || (nr >= lhs))
 
-				return ((nr + sz) % HdlcDefs.SNUM_SIZE_COUNT) - rhs;
-
-			else
-				return 0;
+		if ((rhs - sz) >= 0) {
+			lhs = rhs - sz; // left hand side = right hand side - size of the window
+			return ((nr <= rhs) && (nr >= lhs)) ? nr - lhs : 0;
 		}
-		/*
-		 * Cas 2:
-		 * Le côté droit est plus grand que la taille de la fenêtre
-		 */
-		else {
-			lhs = rhs - sz;
-			if ((nr <= rhs) && (nr >= lhs))
-				return nr - lhs;
-			else
-				return 0;
-		}
+		lhs = sz + rhs; // left hand side = right hand side + size of the window
+		return ((nr <= rhs) || (nr >= lhs)) ? ((sz + nr) % HdlcDefs.SNUM_SIZE_COUNT) - rhs : 0;
 	}
 
 	/*
@@ -240,20 +216,13 @@ public class SecondaryHDLCDataLink {
 
 		/* Completer cette methode */
 		String frame;
-		// Tient le RR-Frame ou null si wait est mis à false et aucun RR-Frame n'est
-		// disponible
-		do {
+		frame = getFrame(wait);
+		while (frame == null && wait) {
 			frame = getFrame(wait);
-			// Récupérer le cadre à l'aide de la méthode getFrame
-			// Si aucun frame RR n'est reçu return null
-			if (!(frame != null && (frame.substring(HdlcDefs.TYPE_START, HdlcDefs.TYPE_END).equals(HdlcDefs.S_FRAME))
-					&& (frame.substring(HdlcDefs.S_START, HdlcDefs.S_END).equals(HdlcDefs.RR_SS))))
+			if (!(frame != null && (frame.substring(HdlcDefs.S_START, HdlcDefs.S_END).equals(HdlcDefs.RR_SS))
+					&& (frame.substring(HdlcDefs.TYPE_START, HdlcDefs.TYPE_END).equals(HdlcDefs.S_FRAME))))
 				return frame = null;
-		} while (wait && frame == null);
-		// Attend que frame si wait est mis à true ou terminer la boucle après la
-		// première exécution
-
-		// CHANGE ################################################################
+		}
 		return (frame);
 	}
 
