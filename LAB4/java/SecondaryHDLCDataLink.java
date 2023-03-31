@@ -143,7 +143,6 @@ public class SecondaryHDLCDataLink
 		// Wait for poll - need an RR with P bit - 1
 		 
 		/*Completer cette partie*/
-
 		do {
 			frame = getRRFrame(true);
 		} while(frame.charAt(HdlcDefs.PF_IX) == '0');
