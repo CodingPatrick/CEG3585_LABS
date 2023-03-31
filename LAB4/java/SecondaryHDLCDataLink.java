@@ -144,11 +144,9 @@ public class SecondaryHDLCDataLink
 		 
 		/*Completer cette partie*/
 
-		frame = getRRFrame(true);
-		boolean condition = frame.charAt(HdlcDefs.PF_IX) == '0';
-		if(condition) {
-			return null;
-		}
+		do {
+			frame = getRRFrame(true);
+		} while(frame.charAt(HdlcDefs.PF_IX) == '0');
 
 		// Send the SDU
 		// After each transmission, check for an ACK (RR)
@@ -169,7 +167,7 @@ public class SecondaryHDLCDataLink
 		while(frameBuffer.size()>0 || i<dataArr.length)
 		{
 			// Send frame if window not closed and data not all transmitted
-			if(i<dataArr.length && vs!=rhsWindow)
+			if(i<dataArr.length && vs!=rhsWindow && frame != null)
 			{
 				frameBuffer.add(bString = dataArr[i]);
 				vs = ++vs % HdlcDefs.SNUM_SIZE_COUNT;
@@ -180,16 +178,19 @@ public class SecondaryHDLCDataLink
 				String con = HdlcDefs.I_FRAME+BitString.intToBitString(fnum, 3)+fLast+BitString.intToBitString(vr, 3);
 				String send = HdlcDefs.FLAG+add+con+bString+HdlcDefs.FLAG;
 				physicalLayer.transmit(send);
+				i = i + 1;
 				displayDataXchngState("Data Link Layer: prepared and buffered I frame >"+BitString.displayFrame(frame)+"<");
 			}
 			// Check for RR
 			frame = getRRFrame(false); // just poll
-			if((frame != null) && condition) // have a frame
+			if((frame != null) && frame.charAt(HdlcDefs.PF_IX) == '0') // have a frame
 			{
 				nr = BitString.bitStringToInt(frame.substring(HdlcDefs.NR_START, HdlcDefs.NR_END));
 				ack = checkNr(nr, rhsWindow, windowSize);
 				rhsWindow = (rhsWindow+ack) % HdlcDefs.SNUM_SIZE_COUNT;
-				for (int j = 0; j < ack; j++) frameBuffer.remove(0);
+				for (int j = 0; j < ack; j++){
+					frameBuffer.remove(0);
+				}
 				displayDataXchngState("received an RR frame (ack) >"+BitString.displayFrame(frame)+"<");
 			}	
 		}
